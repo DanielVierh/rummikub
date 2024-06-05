@@ -11,6 +11,7 @@ window.onload = init();
 function init() {
    setTimeout(() => {
     createPlayPieces();
+    createPlayPieces();
    }, 1000);
 }
 
@@ -32,16 +33,23 @@ function createPlayPieces() {
     }
 
     playPieces.push(new PlayPiece('🃟','black',true))
-    playPieces.push(new PlayPiece('🃟','black',true))
 
- render_Playpiece()
+ render_Playpiece();
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
 }
 
 
 //*ANCHOR - Render Playpiece
 function render_Playpiece() {
-    playPieces.forEach((playpiece) => {
-        console.log(playpiece);
+    const shuffled_playpieces = shuffleArray(playPieces)
+    shuffled_playpieces.forEach((playpiece) => {
 
         let stone = document.createElement('div');
         stone.innerHTML = playpiece.val;
