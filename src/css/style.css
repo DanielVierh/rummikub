@@ -1,0 +1,67 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+.matchfield {
+  background-color: lightcyan;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  height: 65vh;
+  gap: 3px;
+  padding: 10px;
+  width: 100%;
+}
+
+.stone {
+  background-color: rgb(233, 233, 166);
+  width: 45px;
+  height: 55px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: center;
+  padding-top: 5px;
+  font-size: 1.9rem;
+  font-weight: bolder;
+  position: relative;
+  border-radius: 4px;
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
+  border: 0.1px solid rgba(0, 0, 0, 0.424);
+}
+.stone.red {
+  color: red;
+}
+.stone.green {
+  color: green;
+}
+.stone.blue {
+  color: blue;
+}
+.stone.orange {
+  color: orange;
+}
+.stone::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 60%;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid lightgray;
+  transform: translate(-50%);
+}
+
+.board {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: brown;
+  width: 100%;
+  height: 25vh;
+}/*# sourceMappingURL=style.css.map */
