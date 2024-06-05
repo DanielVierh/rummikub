@@ -64,6 +64,7 @@ function render_Playpiece() {
         stone.classList.add(color);
         stone.classList.add('stone');
         stone.setAttribute('data-joker', `${playpiece.isJoker}`);
+        stone.setAttribute('data-color', `${color}`);
 
         matchfield.appendChild(stone);
     })
