@@ -70,58 +70,60 @@ function render_Playpiece() {
 
 
 //* Drag and drop
-const king = document.getElementById('king')
-const squares = document.querySelectorAll('.square');
-const infoDisplay = document.getElementById('info')
+ // Drag and drop
+ const king = document.getElementById('king');
+ const squares = document.querySelectorAll('.square');
+ const infoDisplay = document.getElementById('info');
 
-king.addEventListener('drag', dragging)
-king.addEventListener('dragstart', dragStart)
+ king.addEventListener('drag', dragging);
+ king.addEventListener('dragstart', dragStart);
 
-squares.forEach((square)=> {
-    square.addEventListener('dragover', dragOver)
-    square.addEventListener('dragenter', dragEnter)
-    square.addEventListener('dragleave',dragLeave )
-    square.addEventListener('drop', dragDrop)
-    square.addEventListener('dragend', dragEnd )
-})
+ squares.forEach((square) => {
+     square.addEventListener('dragover', dragOver);
+     square.addEventListener('dragenter', dragEnter);
+     square.addEventListener('dragleave', dragLeave);
+     square.addEventListener('drop', dragDrop);
+     square.addEventListener('dragend', dragEnd);
+ });
 
-let beingDraggged 
+ let beingDragged;
 
-function dragStart (e) {
-    beingDraggged = e.target
-    console.log("dragging has started on " + beingDraggged.id);
-}
+ function dragStart(e) {
+     beingDragged = e.target;
+     console.log("dragging has started on " + beingDragged.id);
+ }
 
-function dragging() {
-    console.log(beingDraggged.id + " is being dragged");
-    infoDisplay.innerHTML = beingDraggged.id + " is being dragged"
-}
+ function dragging() {
+     console.log(beingDragged.id + " is being dragged");
+     infoDisplay.innerHTML = beingDragged.id + " is being dragged";
+ }
 
-function dragOver(e) {
-    e.preventDefault();
-    console.log('you are dragging something over ' + e.target.classList);
-}
+ function dragOver(e) {
+     e.preventDefault();
+     console.log('you are dragging something over ' + e.target.classList);
+ }
 
-function dragEnter(e) {
-    e.target.classList.add('highlighted')
-    console.log('you are entering the space of ' + e.target.classList);
-}
+ function dragEnter(e) {
+     e.preventDefault();
+     e.target.classList.add('highlighted');
+     console.log('you are entering the space of ' + e.target.classList);
+ }
 
-function dragLeave(e) {
-    // console.log('you are leaving the space of ' + e.target.classList);
-    e.target.classList.remove('highlighted')
-}
+ function dragLeave(e) {
+     e.target.classList.remove('highlighted');
+     console.log('you are leaving the space of ' + e.target.classList);
+ }
 
-function dragDrop(e) {
-    e.target.classList.remove('highlighted')
-    console.log('you have dropped something into ' + e.target.classList);
-    e.target.append(beingDraggged)
-}
+ function dragDrop(e) {
+     e.target.classList.remove('highlighted');
+     console.log('you have dropped something into ' + e.target.classList);
+     e.target.append(beingDragged);
+ }
 
-function dragEnd(e) {
-    e.target.classList.add('target')
-    setTimeout(() => {
-        e.target.classList.remove('target')
-    }, 100);
-    console.log('The drag has ended in ' + e.target.classList);
-}
+ function dragEnd(e) {
+     e.target.classList.add('target');
+     setTimeout(() => {
+         e.target.classList.remove('target');
+     }, 100);
+     console.log('The drag has ended in ' + e.target.classList);
+ }
