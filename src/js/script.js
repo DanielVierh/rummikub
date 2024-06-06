@@ -37,7 +37,7 @@ function createPlayPieces() {
         playPieces.push(new PlayPiece('🃟', 'black', true, `${counter}`))
     }
 
-    shuffled_playpieces = shuffleArray(playPieces);
+    //shuffled_playpieces = shuffleArray(playPieces);
     console.log(playPieces);
     render_Playpiece();
 }
@@ -54,7 +54,7 @@ function shuffleArray(array) {
 
 //*ANCHOR - Render Playpiece
 function render_Playpiece() {
-    shuffled_playpieces.forEach((playpiece) => {
+    playPieces.forEach((playpiece) => {
 
         let stone = document.createElement('div');
         stone.innerHTML = playpiece.val;
@@ -103,18 +103,25 @@ function dragOver(e) {
 }
 
 function dragEnter(e) {
+    e.target.classList.add('highlighted')
     console.log('you are entering the space of ' + e.target.classList);
 }
 
 function dragLeave(e) {
-    console.log('you are leaving the space of ' + e.target.classList);
+    // console.log('you are leaving the space of ' + e.target.classList);
+    e.target.classList.remove('highlighted')
 }
 
 function dragDrop(e) {
+    e.target.classList.remove('highlighted')
     console.log('you have dropped something into ' + e.target.classList);
     e.target.append(beingDraggged)
 }
 
 function dragEnd(e) {
+    e.target.classList.add('target')
+    setTimeout(() => {
+        e.target.classList.remove('target')
+    }, 100);
     console.log('The drag has ended in ' + e.target.classList);
 }
