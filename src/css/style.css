@@ -10,11 +10,43 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  height: 75vh;
+  min-height: 50vh;
+  max-height: 75vh;
   gap: 3px;
   padding: 10px;
   width: 100%;
   overflow-y: scroll;
+}
+
+.stack {
+  background-color: red;
+}
+
+.gameboard {
+  display: flex;
+  width: 600px;
+}
+.gameboard .square {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.gameboard .square.beige {
+  background-color: beige;
+}
+.gameboard .square.brown {
+  background-color: brown;
+}
+.gameboard .square .chess-piece {
+  width: 200px;
+  height: 200px;
+  background-color: black;
+}
+
+#info {
+  height: 30px;
 }
 
 .stone {

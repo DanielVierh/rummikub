@@ -1,6 +1,3 @@
-const colors = ['red', 'orange', 'blue', 'green'];
-const playPieceAmount = 104;
-const jokerAmount = 2;
 let playPieces = [];
 let shuffled_playpieces = [];
 
@@ -28,6 +25,7 @@ class PlayPiece {
 
 //*ANCHOR -  create Play Pieces 
 function createPlayPieces() {
+    const colors = ['red', 'orange', 'blue', 'green'];
     let counter = 1;
     for (let d = 1; d <= 2; d++) {
         for (let c = 0; c < colors.length; c++) {
@@ -68,4 +66,55 @@ function render_Playpiece() {
 
         matchfield.appendChild(stone);
     })
+}
+
+
+//* Drag and drop
+const king = document.getElementById('king')
+const squares = document.querySelectorAll('.square');
+const infoDisplay = document.getElementById('info')
+
+king.addEventListener('drag', dragging)
+king.addEventListener('dragstart', dragStart)
+
+squares.forEach((square)=> {
+    square.addEventListener('dragover', dragOver)
+    square.addEventListener('dragenter', dragEnter)
+    square.addEventListener('dragleave',dragLeave )
+    square.addEventListener('drop', dragDrop)
+    square.addEventListener('dragend', dragEnd )
+})
+
+let beingDraggged 
+
+function dragStart (e) {
+    beingDraggged = e.target
+    console.log("dragging has started on " + beingDraggged.id);
+}
+
+function dragging() {
+    console.log(beingDraggged.id + " is being dragged");
+    infoDisplay.innerHTML = beingDraggged.id + " is being dragged"
+}
+
+function dragOver(e) {
+    e.preventDefault();
+    console.log('you are dragging something over ' + e.target.classList);
+}
+
+function dragEnter(e) {
+    console.log('you are entering the space of ' + e.target.classList);
+}
+
+function dragLeave(e) {
+    console.log('you are leaving the space of ' + e.target.classList);
+}
+
+function dragDrop(e) {
+    console.log('you have dropped something into ' + e.target.classList);
+    e.target.append(beingDraggged)
+}
+
+function dragEnd(e) {
+    console.log('The drag has ended in ' + e.target.classList);
 }
