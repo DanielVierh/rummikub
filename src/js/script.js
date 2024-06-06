@@ -70,60 +70,93 @@ function render_Playpiece() {
 
 
 //* Drag and drop
-         // Drag and drop
-         const king = document.getElementById('king');
-         const squares = document.querySelectorAll('.square');
-         const infoDisplay = document.getElementById('info');
- 
-         king.addEventListener('drag', dragging);
-         king.addEventListener('dragstart', dragStart);
- 
-         squares.forEach((square) => {
-             square.addEventListener('dragover', dragOver);
-             square.addEventListener('dragenter', dragEnter);
-             square.addEventListener('dragleave', dragLeave);
-             square.addEventListener('drop', dragDrop);
-             square.addEventListener('dragend', dragEnd);
-         });
- 
-         let beingDragged;
- 
-         function dragStart(e) {
-             beingDragged = e.target;
-             console.log("dragging has started on " + beingDragged.id);
-         }
- 
-         function dragging() {
-             console.log(beingDragged.id + " is being dragged");
-             infoDisplay.innerHTML = beingDragged.id + " is being dragged";
-         }
- 
-         function dragOver(e) {
-             e.preventDefault();
-             console.log('you are dragging something over ' + e.target.classList);
-         }
- 
-         function dragEnter(e) {
-             e.preventDefault();
-             e.target.classList.add('highlighted');
-             console.log('you are entering the space of ' + e.target.classList);
-         }
- 
-         function dragLeave(e) {
-             e.target.classList.remove('highlighted');
-             console.log('you are leaving the space of ' + e.target.classList);
-         }
- 
-         function dragDrop(e) {
-             e.target.classList.remove('highlighted');
-             console.log('you have dropped something into ' + e.target.classList);
-             e.target.append(beingDragged);
-         }
- 
-         function dragEnd(e) {
-             e.target.classList.add('target');
-             setTimeout(() => {
-                 e.target.classList.remove('target');
-             }, 100);
-             console.log('The drag has ended in ' + e.target.classList);
-         }
+const king = document.getElementById('king');
+const squares = document.querySelectorAll('.square');
+const infoDisplay = document.getElementById('info');
+
+// Desktop drag events
+king.addEventListener('drag', dragging);
+king.addEventListener('dragstart', dragStart);
+
+squares.forEach((square) => {
+    square.addEventListener('dragover', dragOver);
+    square.addEventListener('dragenter', dragEnter);
+    square.addEventListener('dragleave', dragLeave);
+    square.addEventListener('drop', dragDrop);
+    square.addEventListener('dragend', dragEnd);
+});
+
+// Mobile touch events for the king
+king.addEventListener('touchstart', touchStart);
+king.addEventListener('touchmove', touchMove);
+king.addEventListener('touchend', touchEnd);
+
+let beingDragged;
+
+function dragStart(e) {
+    beingDragged = e.target;
+    console.log("dragging has started on " + beingDragged.id);
+}
+
+function dragging() {
+    console.log(beingDragged.id + " is being dragged");
+    infoDisplay.innerHTML = beingDragged.id + " is being dragged";
+}
+
+function dragOver(e) {
+    e.preventDefault();
+    console.log('you are dragging something over ' + e.target.classList);
+}
+
+function dragEnter(e) {
+    e.preventDefault();
+    e.target.classList.add('highlighted');
+    console.log('you are entering the space of ' + e.target.classList);
+}
+
+function dragLeave(e) {
+    e.target.classList.remove('highlighted');
+    console.log('you are leaving the space of ' + e.target.classList);
+}
+
+function dragDrop(e) {
+    e.target.classList.remove('highlighted');
+    console.log('you have dropped something into ' + e.target.classList);
+    e.target.append(beingDragged);
+}
+
+function dragEnd(e) {
+    e.target.classList.add('target');
+    setTimeout(() => {
+        e.target.classList.remove('target');
+    }, 100);
+    console.log('The drag has ended in ' + e.target.classList);
+}
+
+// Touch event handlers for king only
+function touchStart(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    beingDragged = e.target;
+    beingDragged.style.position = 'absolute';
+    beingDragged.style.left = touch.pageX - (beingDragged.offsetWidth / 2) + 'px';
+    beingDragged.style.top = touch.pageY - (beingDragged.offsetHeight / 2) + 'px';
+}
+
+function touchMove(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    beingDragged.style.left = touch.pageX - (beingDragged.offsetWidth / 2) + 'px';
+    beingDragged.style.top = touch.pageY - (beingDragged.offsetHeight / 2) + 'px';
+}
+
+function touchEnd(e) {
+    e.preventDefault();
+    const touch = e.changedTouches[0];
+    const dropTarget = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (dropTarget && dropTarget.classList.contains('square')) {
+        dropTarget.append(beingDragged);
+        console.log('you have dropped something into ' + dropTarget.classList);
+    }
+    beingDragged.style.position = 'static';
+}

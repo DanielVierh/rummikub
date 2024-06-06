@@ -33,29 +33,29 @@
     justify-content: center;
     align-items: center;
     border: 1px solid black;
-    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
-    user-select: none; /* Prevents text selection */
-    -webkit-user-select: none; /* For Safari */
-    -ms-user-select: none; /* For Internet Explorer/Edge */
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
 .highlighted {
     background-color: yellow !important;
-    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+    box-sizing: border-box;
 }
 
 .target {
     border: 10px solid rgb(56, 139, 169);
-    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+    box-sizing: border-box;
 }
 
 .chess-piece {
     width: 45px;
     height: 55px;
     background-color: black;
-    user-select: none; /* Prevents text selection */
-    -webkit-user-select: none; /* For Safari */
-    -ms-user-select: none; /* For Internet Explorer/Edge */
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
 #info {
