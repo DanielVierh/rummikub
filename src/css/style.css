@@ -38,24 +38,37 @@
   box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
   border: 0.1px solid rgba(0, 0, 0, 0.424);
   position: relative;
+  z-index: 1;
 }
 .stack::before {
   content: "";
+  position: absolute;
   z-index: -1;
-  left: 20%;
+  left: 10%;
   width: 45px;
   background-color: rgb(233, 233, 166);
   height: 55px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  text-align: center;
   padding-top: 2px;
   font-size: 1.9rem;
   font-weight: bolder;
-  position: relative;
   border-radius: 4px;
-  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+  border: 0.1px solid rgba(0, 0, 0, 0.424);
+}
+.stack::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 5%;
+  top: 10%;
+  width: 45px;
+  height: 55px;
+  background-color: rgb(233, 233, 166);
+  padding-top: 2px;
+  font-size: 1.9rem;
+  font-weight: bolder;
+  border-radius: 4px;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
   border: 0.1px solid rgba(0, 0, 0, 0.424);
 }
 
