@@ -1,12 +1,12 @@
 let stackPieces = [];
 let playerHand = [];
-let table = [];
+let brett = [];
 let computerHand = [];
 let board = [];
 
-const matchfield_obj = document.getElementById('matchfield');
+const board_obj = document.getElementById('matchfield');
 const stack_obj = document.getElementById('stack');
-const board_obj = document.getElementById('board');
+const brett_obj = document.getElementById('board');
 
 //*ANCHOR -  Init
 window.onload = init();
@@ -18,11 +18,9 @@ function init() {
 
     setTimeout(() => {
         get_first_Stones();
-    },800);
+    }, 800);
 
     setTimeout(() => {
-        render_Playpiece(stackPieces, matchfield_obj);
-        render_Playpiece(table, board_obj);
         update();
     }, 900);
 }
@@ -74,9 +72,10 @@ function render_Playpiece(array, render_surface) {
         stone.classList.add('stone');
         stone.setAttribute('data-joker', `${arr.isJoker}`);
         stone.setAttribute('data-color', `${color}`);
-        stone.setAttribute('data-place', 'stack');
+        stone.setAttribute('data-place', `${arr.place}`);
 
-        stone.addEventListener('click', ()=> {
+        stone.addEventListener('click', () => {
+            remove_all_selections();
             stone.classList.add('selected-stone');
         })
 
@@ -84,6 +83,12 @@ function render_Playpiece(array, render_surface) {
     });
 }
 
+function remove_all_selections() {
+    let used_class = document.querySelectorAll('.selected-stone')
+    used_class.forEach((used)=> {
+        used.classList.remove('selected-stone')
+    });
+}
 
 
 //* Spieler und Computer ziehen 14 Steine
@@ -92,7 +97,7 @@ function get_first_Stones() {
         drawTile(playerHand);
         drawTile(computerHand);
     }
-    table = playerHand;
+    brett = playerHand;
 }
 
 
@@ -104,24 +109,30 @@ function drawTile(hand) {
 
 function update() {
     set_places(stackPieces, 'stackPieces');
+    set_places(brett, 'brett');
+    set_places(computerHand, 'computerHand');
+    set_places(board, 'board');
+    render_Playpiece(stackPieces, board_obj);
+    render_Playpiece(brett, brett_obj);
 }
 
 
-function set_places(tilesetArray, array_name){
-    tilesetArray.forEach((tile)=> {
-        if(array_name === 'stackPieces') {
-            console.log(tile);
-            tile.place = 'stack'
+function set_places(tilesetArray, array_name) {
+    tilesetArray.forEach((tile) => {
+        if (array_name === 'stackPieces') {
+            tile.place = 'stack';
         }
 
-        if(array_name === 'stackPieces') {
-            console.log(tile);
-            tile.place = 'stack'
+        if (array_name === 'brett') {
+            tile.place = 'brett';
         }
 
-        if(array_name === 'stackPieces') {
-            console.log(tile);
-            tile.place = 'stack'
+        if (array_name === 'computerHand') {
+            tile.place = 'computerHand';
+        }
+
+        if (array_name === 'board') {
+            tile.place = 'board'
         }
     })
 }
