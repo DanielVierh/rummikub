@@ -1,15 +1,28 @@
 let playPieces = [];
-
+let playerHand = [];
+let computerHand = [];
+let table = [];
 
 const matchfield = document.getElementById('matchfield');
 const stack = document.getElementById('stack');
+const board = document.getElementById('board');
 
 //*ANCHOR -  Init
 window.onload = init();
 function init() {
     setTimeout(() => {
         createPlayPieces();
-    }, 1000);
+        playPieces = shuffleArray(playPieces);
+    }, 700);
+
+    setTimeout(() => {
+        get_first_Stones();
+    },800);
+
+    setTimeout(() => {
+        render_Playpiece(playPieces, matchfield);
+        render_Playpiece(table, board);
+    }, 900);
 }
 
 //*ANCHOR -  PlayPiece
@@ -35,10 +48,6 @@ function createPlayPieces() {
         }
         playPieces.push(new PlayPiece('🃟', 'black', true, `${counter}`))
     }
-
-    //playPieces = shuffleArray(playPieces);
-    // console.log(playPieces);
-    render_Playpiece();
 }
 
 //*ANCHOR -  shuffle Play Pieces 
@@ -52,17 +61,36 @@ function shuffleArray(array) {
 
 
 //*ANCHOR - Render Playpiece
-function render_Playpiece() {
-    playPieces.forEach((playpiece) => {
+function render_Playpiece(array, render_surface) {
+    array.forEach((arr) => {
 
         let stone = document.createElement('div');
-        stone.innerHTML = playpiece.val;
-        const color = playpiece.color;
+        stone.innerHTML = arr.val;
+        const color = arr.color;
         stone.classList.add(color);
         stone.classList.add('stone');
-        stone.setAttribute('data-joker', `${playpiece.isJoker}`);
+        stone.setAttribute('data-joker', `${arr.isJoker}`);
         stone.setAttribute('data-color', `${color}`);
 
-        matchfield.appendChild(stone);
-    })
+        render_surface.appendChild(stone);
+    });
+}
+
+
+
+//* Spieler und Computer ziehen 14 Steine
+function get_first_Stones() {
+    for (let i = 0; i < 14; i++) {
+        drawTile(playerHand);
+        drawTile(computerHand);
+    }
+    table = playerHand;
+    console.log('table', table);
+}
+
+
+function drawTile(hand) {
+    if (playPieces.length > 0) {
+        hand.push(playPieces.pop());
+    }
 }
