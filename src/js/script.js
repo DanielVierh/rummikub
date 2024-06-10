@@ -1,5 +1,4 @@
 let playPieces = [];
-let shuffled_playpieces = [];
 
 
 const matchfield = document.getElementById('matchfield');
@@ -37,8 +36,8 @@ function createPlayPieces() {
         playPieces.push(new PlayPiece('🃟', 'black', true, `${counter}`))
     }
 
-    //shuffled_playpieces = shuffleArray(playPieces);
-    console.log(playPieces);
+    //playPieces = shuffleArray(playPieces);
+    // console.log(playPieces);
     render_Playpiece();
 }
 
