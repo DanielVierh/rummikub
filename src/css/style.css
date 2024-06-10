@@ -22,48 +22,6 @@
   background-color: red;
 }
 
-.gameboard {
-  display: flex;
-}
-
-.square {
-  width: 45px;
-  height: 55px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid black;
-  box-sizing: border-box;
-  -moz-user-select: none;
-       user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-}
-
-.highlighted {
-  background-color: yellow !important;
-  box-sizing: border-box;
-}
-
-.target {
-  border: 10px solid rgb(56, 139, 169);
-  box-sizing: border-box;
-}
-
-.chess-piece {
-  width: 45px;
-  height: 55px;
-  background-color: black;
-  -moz-user-select: none;
-       user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-}
-
-#info {
-  height: 30px;
-}
-
 .stone {
   background-color: rgb(233, 233, 166);
   width: 45px;
