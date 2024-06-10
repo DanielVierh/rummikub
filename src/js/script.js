@@ -1,18 +1,19 @@
-let playPieces = [];
+let stackPieces = [];
 let playerHand = [];
-let computerHand = [];
 let table = [];
+let computerHand = [];
+let board = [];
 
-const matchfield = document.getElementById('matchfield');
-const stack = document.getElementById('stack');
-const board = document.getElementById('board');
+const matchfield_obj = document.getElementById('matchfield');
+const stack_obj = document.getElementById('stack');
+const board_obj = document.getElementById('board');
 
 //*ANCHOR -  Init
 window.onload = init();
 function init() {
     setTimeout(() => {
         createPlayPieces();
-        playPieces = shuffleArray(playPieces);
+        stackPieces = shuffleArray(stackPieces);
     }, 700);
 
     setTimeout(() => {
@@ -20,18 +21,20 @@ function init() {
     },800);
 
     setTimeout(() => {
-        render_Playpiece(playPieces, matchfield);
-        render_Playpiece(table, board);
+        render_Playpiece(stackPieces, matchfield_obj);
+        render_Playpiece(table, board_obj);
+        update();
     }, 900);
 }
 
 //*ANCHOR -  PlayPiece
 class PlayPiece {
-    constructor(val, color, isJoker, uid) {
+    constructor(val, color, isJoker, uid, place) {
         this.uid = uid;
         this.val = val;
         this.color = color;
         this.isJoker = isJoker;
+        this.place = place;
     }
 }
 
@@ -42,11 +45,11 @@ function createPlayPieces() {
     for (let d = 1; d <= 2; d++) {
         for (let c = 0; c < colors.length; c++) {
             for (let z = 1; z <= 13; z++) {
-                playPieces.push(new PlayPiece(z, colors[c], false, `${counter}`));
+                stackPieces.push(new PlayPiece(z, colors[c], false, `${counter}`));
                 counter++;
             }
         }
-        playPieces.push(new PlayPiece('🃟', 'black', true, `${counter}`))
+        stackPieces.push(new PlayPiece('🃟', 'black', true, `${counter}`))
     }
 }
 
@@ -71,6 +74,11 @@ function render_Playpiece(array, render_surface) {
         stone.classList.add('stone');
         stone.setAttribute('data-joker', `${arr.isJoker}`);
         stone.setAttribute('data-color', `${color}`);
+        stone.setAttribute('data-place', 'stack');
+
+        stone.addEventListener('click', ()=> {
+            stone.classList.add('selected-stone');
+        })
 
         render_surface.appendChild(stone);
     });
@@ -85,12 +93,35 @@ function get_first_Stones() {
         drawTile(computerHand);
     }
     table = playerHand;
-    console.log('table', table);
 }
 
 
 function drawTile(hand) {
-    if (playPieces.length > 0) {
-        hand.push(playPieces.pop());
+    if (stackPieces.length > 0) {
+        hand.push(stackPieces.pop());
     }
+}
+
+function update() {
+    set_places(stackPieces, 'stackPieces');
+}
+
+
+function set_places(tilesetArray, array_name){
+    tilesetArray.forEach((tile)=> {
+        if(array_name === 'stackPieces') {
+            console.log(tile);
+            tile.place = 'stack'
+        }
+
+        if(array_name === 'stackPieces') {
+            console.log(tile);
+            tile.place = 'stack'
+        }
+
+        if(array_name === 'stackPieces') {
+            console.log(tile);
+            tile.place = 'stack'
+        }
+    })
 }

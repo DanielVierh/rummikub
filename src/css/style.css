@@ -100,6 +100,10 @@
 .stone.orange {
   color: orange;
 }
+.stone.selected-stone {
+  outline: 3px solid red;
+  box-shadow: 0 0 10px red;
+}
 .stone::after {
   content: "";
   position: absolute;
