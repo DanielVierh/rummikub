@@ -6,7 +6,7 @@
 }
 
 .matchfield {
-    background-color: lightcyan;
+    background-color: rgb(63, 56, 52);
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -141,4 +141,15 @@
     padding-top: 10px;
     justify-content: center;
 
+    .info-label {
+        position: absolute;
+        top: -20px;
+        right: 15%;
+        height: 20px;
+        background-color: red;
+        width: 200px;
+
+    }
+
 }
+
