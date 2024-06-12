@@ -1,3 +1,8 @@
+:root {
+  --fld-width: 40px;
+  --fld-height: 50px;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -6,26 +11,36 @@
 }
 
 .matchfield {
-  background-color: rgb(63, 56, 52);
+  background: radial-gradient(rgba(9, 62, 148, 0.544), rgb(1, 1, 94));
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   min-height: 50vh;
-  max-height: 75vh;
+  max-height: 70vh;
   gap: 3px;
   padding: 10px;
   width: 100%;
   overflow-y: scroll;
 }
+.matchfield .field-wrapper {
+  display: flex;
+  margin: 5px;
+  gap: 5px;
+}
+.matchfield .field-wrapper .field {
+  width: var(--fld-width);
+  height: var(--fld-height);
+  border: 1px solid rgba(173, 216, 230, 0.364);
+}
 
 .stack {
   margin: 20px;
   position: fixed;
-  left: 10%;
-  top: 50%;
+  left: 0%;
+  top: 20%;
   background-color: rgb(233, 233, 166);
-  width: 45px;
-  height: 55px;
+  width: var(--fld-width);
+  height: var(--fld-height);
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -33,11 +48,9 @@
   padding-top: 2px;
   font-size: 1.9rem;
   font-weight: bolder;
-  position: relative;
   border-radius: 4px;
   box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
   border: 0.1px solid rgba(0, 0, 0, 0.424);
-  position: relative;
   z-index: 1;
 }
 .stack::before {
@@ -45,9 +58,9 @@
   position: absolute;
   z-index: -1;
   left: 10%;
-  width: 45px;
+  width: var(--fld-width);
   background-color: rgb(233, 233, 166);
-  height: 55px;
+  height: var(--fld-height);
   padding-top: 2px;
   font-size: 1.9rem;
   font-weight: bolder;
@@ -61,8 +74,8 @@
   z-index: 2;
   left: 5%;
   top: 10%;
-  width: 45px;
-  height: 55px;
+  width: var(--fld-width);
+  height: var(--fld-height);
   background-color: rgb(233, 233, 166);
   padding-top: 2px;
   font-size: 1.9rem;
@@ -74,8 +87,8 @@
 
 .stone {
   background-color: rgb(233, 233, 166);
-  width: 45px;
-  height: 55px;
+  width: var(--fld-width);
+  height: var(--fld-height);
   display: flex;
   justify-content: center;
   align-items: flex-start;

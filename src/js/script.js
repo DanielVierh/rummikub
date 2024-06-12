@@ -145,3 +145,25 @@ function set_places(tilesetArray, array_name) {
         }
     });
 }
+
+
+function create_Fields() {
+    for(let i = 1; i < 15; i++) {
+
+        let field_wrapper = document.createElement('div');
+        field_wrapper.classList.add('field-wrapper');
+
+        for(let j = 1; j < 13; j++) {
+
+            let field = document.createElement('div');
+            field.classList.add('field');
+
+            field_wrapper.appendChild(field)
+
+        }
+
+        board_obj.appendChild(field_wrapper)
+    }
+}
+
+create_Fields()
