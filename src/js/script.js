@@ -4,6 +4,7 @@ let brett = [];
 let computerHand = [];
 let board = [];
 let board_sets = [];
+let selected_stone = undefined;
 
 const board_obj = document.getElementById('matchfield');
 const stack_obj = document.getElementById('stack');
@@ -16,6 +17,7 @@ function init() {
     setTimeout(() => {
         createPlayPieces();
         stackPieces = shuffleArray(stackPieces);
+        create_Fields();
     }, 400);
 
     setTimeout(() => {
@@ -73,6 +75,7 @@ function shuffleArray(array) {
 
 //*ANCHOR - Render Playpiece
 function render_Playpiece(array, render_surface) {
+    render_surface.innerHTML = '';
     array.forEach((arr) => {
 
         let stone = document.createElement('div');
@@ -87,6 +90,7 @@ function render_Playpiece(array, render_surface) {
         stone.addEventListener('click', () => {
             remove_all_selections();
             stone.classList.add('selected-stone');
+            selected_stone = arr;
         })
 
         render_surface.appendChild(stone);
@@ -152,11 +156,50 @@ function create_Fields() {
 
         let field_wrapper = document.createElement('div');
         field_wrapper.classList.add('field-wrapper');
+        field_wrapper.id = `field_wrapper${i}`;
 
-        for(let j = 1; j < 13; j++) {
+        for(let j = 1; j <= 13; j++) {
 
             let field = document.createElement('div');
             field.classList.add('field');
+            field.id = `field_wrapper${i}_${j}`;
+            field.setAttribute('data-hold_id', '');
+            field.setAttribute('data-hold_color', '');
+            field.setAttribute('data-hold_value', '');
+
+            //* Click on Field and place Stone from brett to field
+            field.addEventListener('click', ()=> {
+                if(selected_stone !== undefined) {
+                    console.log(selected_stone);
+                    field.setAttribute('data-hold_id', selected_stone.uid);
+                    field.setAttribute('data-hold_color', selected_stone.color);
+                    field.setAttribute('data-hold_value', selected_stone.val);
+
+                    let stone = document.createElement('div');
+                    stone.innerHTML = selected_stone.name;
+                    const color = selected_stone.color;
+                    stone.classList.add(color);
+                    stone.classList.add('stone');
+                    stone.setAttribute('data-joker', `${selected_stone.isJoker}`);
+                    stone.setAttribute('data-color', `${color}`);
+                    stone.setAttribute('data-place', `${selected_stone.place}`);
+            
+                    stone.addEventListener('click', () => {
+                        remove_all_selections();
+                        stone.classList.add('selected-stone');
+                        selected_stone = selected_stone;
+                    })
+
+                    field.appendChild(stone);
+
+                    //* Remove from origin array
+                    const del_index = brett.indexOf(selected_stone);
+                    console.log('del_index', del_index);
+                    brett.splice(del_index, 1);
+                    render_Playpiece(brett, brett_obj);
+
+                }
+            })
 
             field_wrapper.appendChild(field)
 
@@ -166,4 +209,3 @@ function create_Fields() {
     }
 }
 
-create_Fields()
