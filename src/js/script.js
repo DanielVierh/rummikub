@@ -198,6 +198,9 @@ function create_Fields() {
                     brett.splice(del_index, 1);
                     render_Playpiece(brett, brett_obj);
 
+                    //* Set selected_stone to undefined
+                    selected_stone = undefined;
+
                 }
             })
 
