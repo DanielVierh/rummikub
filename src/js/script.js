@@ -29,7 +29,7 @@ function init() {
         updateUI();
     }, 600);
 
-
+    //*ANCHOR Event Listener for Stone
     setTimeout(() => {
         const stones = document.querySelectorAll('.stone');
         stones.forEach((stone) => {
@@ -51,6 +51,7 @@ function init() {
     }, 1000);
 }
 
+ //*ANCHOR Get Object 
 function get_Object_by_ID(uid, place_array) {
     for (let i = 0; i < place_array.length; i++) {
         if (uid === place_array[i].uid) {
@@ -126,6 +127,7 @@ function renderPlayPieces(array, renderSurface) {
     });
 }
 
+ //*ANCHOR Remove Selection Class
 function clearSelection() {
     document.querySelectorAll('.selected-stone').forEach(element => {
         element.classList.remove('selected-stone');
@@ -147,6 +149,7 @@ function drawTile(hand) {
     }
 }
 
+ //*ANCHOR Update
 function updateUI() {
     assignPlaces(stackPieces, 'stack');
     assignPlaces(computerHand, 'computerHand');
@@ -156,12 +159,16 @@ function updateUI() {
     renderPlayPieces(playerHand, playerHandElement);
 }
 
+
+ //*ANCHOR Assign Place
 function assignPlaces(tileArray, placeName) {
     tileArray.forEach(tile => {
         tile.place = placeName;
     });
 }
 
+
+ //*ANCHOR Create Fields
 function createFields() {
     for (let i = 1; i <= 14; i++) {
         const fieldWrapper = document.createElement('div');
@@ -203,6 +210,7 @@ function createFields() {
     }
 }
 
+ //*ANCHOR Place Tile on Field
 function placeTileOnField(field) {
     const selectedIndex = playerHand.indexOf(selectedStone);
     console.log('1 selectedIndex', selectedIndex);
