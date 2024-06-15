@@ -1,65 +1,95 @@
 let stackPieces = [];
 let playerHand = [];
-let brett = [];
 let computerHand = [];
-let board = [];
-let board_sets = [];
-let selected_stone = undefined;
+let boardTiles = [];
+let selectedStone = null;
+let is_firstmove = true;
+let move_Tile_Array = [];
 
-const board_obj = document.getElementById('matchfield');
-const stack_obj = document.getElementById('stack');
-const brett_obj = document.getElementById('board');
-const lbl_info = document.getElementById('lbl_info');
+const boardElement = document.getElementById('matchfield');
+const stackElement = document.getElementById('stack');
+const playerHandElement = document.getElementById('board');
+const infoLabel = document.getElementById('lbl_info');
 
 //*ANCHOR -  Init
-window.onload = init();
+window.onload = init;
+
 function init() {
     setTimeout(() => {
         createPlayPieces();
         stackPieces = shuffleArray(stackPieces);
-        create_Fields();
+        createFields();
     }, 400);
 
     setTimeout(() => {
-        get_first_Stones();
+        dealInitialTiles();
     }, 500);
 
     setTimeout(() => {
-        update();
+        updateUI();
     }, 600);
+
+
+    setTimeout(() => {
+        const stones = document.querySelectorAll('.stone');
+        stones.forEach((stone) => {
+            stone.addEventListener('click', () => {
+                clearSelection();
+                stone.classList.add('selected-stone');
+
+                const sel_id = stone.dataset.id;
+                const sel_place = stone.dataset.place;
+                console.log('sel_place', sel_place);
+                if (sel_place === 'playerHand') {
+                    selectedStone = get_Object_by_ID(sel_id, playerHand);
+                    boardTiles.push(selectedStone)
+                } else if (sel_place === 'board') {
+                    console.log('BOARD');
+                }
+            })
+        })
+    }, 1000);
+}
+
+function get_Object_by_ID(uid, place_array) {
+    for (let i = 0; i < place_array.length; i++) {
+        if (uid === place_array[i].uid) {
+            return place_array[i];
+        }
+    }
 }
 
 //*ANCHOR -  Klasse PlayPiece
 class PlayPiece {
-    constructor(val, name, color, isJoker, uid, place) {
+    constructor(value, name, color, isJoker, uid) {
         this.uid = uid;
-        this.val = val;
+        this.value = value;
         this.color = color;
         this.isJoker = isJoker;
-        this.place = place;
         this.name = name;
+        this.place = '';
+    }
+
+    change_place(newPlace) {
+        this.place = newPlace;
     }
 }
-
-// //* Klasse Sets
-// class Sets {
-//     constructor() {
-
-//     }
-// }
 
 //*ANCHOR -  create Play Pieces 
 function createPlayPieces() {
     const colors = ['red', 'orange', 'blue', 'green'];
-    let counter = 1;
+    let uidCounter = 1;
+
     for (let d = 1; d <= 2; d++) {
-        for (let c = 0; c < colors.length; c++) {
-            for (let z = 1; z <= 13; z++) {
-                stackPieces.push(new PlayPiece(z, z, colors[c], false, `${counter}`));
-                counter++;
+        for (const color of colors) {
+            for (let value = 1; value <= 13; value++) {
+                stackPieces.push(new PlayPiece(value, value, color, false, `${uidCounter++}`));
             }
         }
-        stackPieces.push(new PlayPiece(0, '🃟', 'black', true, `${counter}`))
+        //* Joker 
+        stackPieces.push(new PlayPiece(0, `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="green" class="bi bi-emoji-sunglasses-fill" viewBox="0 0 16 16">
+  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M2.31 5.243A1 1 0 0 1 3.28 4H6a1 1 0 0 1 1 1v.116A4.2 4.2 0 0 1 8 5c.35 0 .69.04 1 .116V5a1 1 0 0 1 1-1h2.72a1 1 0 0 1 .97 1.243l-.311 1.242A2 2 0 0 1 11.439 8H11a2 2 0 0 1-1.994-1.839A3 3 0 0 0 8 6c-.393 0-.74.064-1.006.161A2 2 0 0 1 5 8h-.438a2 2 0 0 1-1.94-1.515zM4.969 9.75A3.5 3.5 0 0 0 8 11.5a3.5 3.5 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1-3.898-2.25.5.5 0 0 1 .866-.5z"/>
+</svg>`, 'black', true, `${uidCounter++}`));
     }
 }
 
@@ -72,143 +102,137 @@ function shuffleArray(array) {
     return array;
 }
 
-
 //*ANCHOR - Render Playpiece
-function render_Playpiece(array, render_surface) {
-    render_surface.innerHTML = '';
-    array.forEach((arr) => {
+function renderPlayPieces(array, renderSurface) {
+    renderSurface.innerHTML = '';
+    console.log('renderSurface', renderSurface);
+    array.forEach(piece => {
+        const tileElement = document.createElement('div');
+        tileElement.innerHTML = piece.name;
+        tileElement.className = `${piece.color} stone`;
+        tileElement.dataset.joker = piece.isJoker;
+        tileElement.dataset.color = piece.color;
+        tileElement.dataset.place = piece.place;
+        tileElement.dataset.id = piece.uid;
 
-        let stone = document.createElement('div');
-        stone.innerHTML = arr.name;
-        const color = arr.color;
-        stone.classList.add(color);
-        stone.classList.add('stone');
-        stone.setAttribute('data-joker', `${arr.isJoker}`);
-        stone.setAttribute('data-color', `${color}`);
-        stone.setAttribute('data-place', `${arr.place}`);
+        // tileElement.addEventListener('click', () => {
+        //     clearSelection();
+        //     tileElement.classList.add('selected-stone');
+        //     selectedStone = piece;
+        //     console.log('Miep');
+        // });
 
-        stone.addEventListener('click', () => {
-            remove_all_selections();
-            stone.classList.add('selected-stone');
-            selected_stone = arr;
-        })
-
-        render_surface.appendChild(stone);
+        renderSurface.appendChild(tileElement);
     });
 }
 
-function remove_all_selections() {
-    let used_class = document.querySelectorAll('.selected-stone')
-    used_class.forEach((used)=> {
-        used.classList.remove('selected-stone')
+function clearSelection() {
+    document.querySelectorAll('.selected-stone').forEach(element => {
+        element.classList.remove('selected-stone');
     });
 }
-
 
 //* Spieler und Computer ziehen 14 Steine
-function get_first_Stones() {
+function dealInitialTiles() {
     for (let i = 0; i < 14; i++) {
         drawTile(playerHand);
         drawTile(computerHand);
     }
-    brett = playerHand;
 }
 
-
+//* Draw Tiles
 function drawTile(hand) {
     if (stackPieces.length > 0) {
         hand.push(stackPieces.pop());
     }
 }
 
-function update() {
-    set_places(stackPieces, 'stackPieces');
-    set_places(computerHand, 'computerHand');
-    set_places(board, 'board');
-    set_places(brett, 'brett');
-    render_Playpiece(brett, brett_obj);
+function updateUI() {
+    assignPlaces(stackPieces, 'stack');
+    assignPlaces(computerHand, 'computerHand');
+    assignPlaces(boardTiles, 'board');
+    assignPlaces(playerHand, 'playerHand');
+
+    renderPlayPieces(playerHand, playerHandElement);
 }
 
-
-function set_places(tilesetArray, array_name) {
-    tilesetArray.forEach((tile) => {
-        if (array_name === 'stackPieces') {
-            tile.place = 'stack';
-        }
-
-        if (array_name === 'computerHand') {
-            tile.place = 'computerHand';
-        }
-
-        if (array_name === 'board') {
-            tile.place = 'board'
-        }
-
-        if (array_name === 'brett') {
-            tile.place = 'brett';
-        }
+function assignPlaces(tileArray, placeName) {
+    tileArray.forEach(tile => {
+        tile.place = placeName;
     });
 }
 
+function createFields() {
+    for (let i = 1; i <= 14; i++) {
+        const fieldWrapper = document.createElement('div');
+        fieldWrapper.className = 'field-wrapper';
+        fieldWrapper.id = `field_wrapper${i}`;
 
-function create_Fields() {
-    for(let i = 1; i < 15; i++) {
-
-        let field_wrapper = document.createElement('div');
-        field_wrapper.classList.add('field-wrapper');
-        field_wrapper.id = `field_wrapper${i}`;
-
-        for(let j = 1; j <= 13; j++) {
-
-            let field = document.createElement('div');
-            field.classList.add('field');
+        for (let j = 1; j <= 13; j++) {
+            const field = document.createElement('div');
+            field.className = 'field';
             field.id = `field_wrapper${i}_${j}`;
-            field.setAttribute('data-hold_id', '');
-            field.setAttribute('data-hold_color', '');
-            field.setAttribute('data-hold_value', '');
+            field.dataset.holdId = '';
+            field.dataset.holdColor = '';
+            field.dataset.holdValue = '';
 
-            //* Click on Field and place Stone from brett to field
-            field.addEventListener('click', ()=> {
-                if(selected_stone !== undefined) {
-                    console.log(selected_stone);
-                    field.setAttribute('data-hold_id', selected_stone.uid);
-                    field.setAttribute('data-hold_color', selected_stone.color);
-                    field.setAttribute('data-hold_value', selected_stone.val);
-
-                    let stone = document.createElement('div');
-                    stone.innerHTML = selected_stone.name;
-                    const color = selected_stone.color;
-                    stone.classList.add(color);
-                    stone.classList.add('stone');
-                    stone.setAttribute('data-joker', `${selected_stone.isJoker}`);
-                    stone.setAttribute('data-color', `${color}`);
-                    stone.setAttribute('data-place', `${selected_stone.place}`);
-            
-                    stone.addEventListener('click', () => {
-                        remove_all_selections();
-                        stone.classList.add('selected-stone');
-                        selected_stone = selected_stone;
-                    })
-
-                    field.appendChild(stone);
-
-                    //* Remove from origin array
-                    const del_index = brett.indexOf(selected_stone);
-                    console.log('del_index', del_index);
-                    brett.splice(del_index, 1);
-                    render_Playpiece(brett, brett_obj);
-
-                    //* Set selected_stone to undefined
-                    selected_stone = undefined;
-
+            field.addEventListener('click', () => {
+                if (selectedStone) {
+                    placeTileOnField(field);
                 }
-            })
+                if (event.target.hasAttribute('data-hold-id') && event.target.getAttribute('data-hold-id') !== '') {
+                    // Suche nach dem Kindelement, das das Attribut data-id besitzt
+                    let childElement = event.target.querySelector('[data-id]');
+                    if (childElement) {
+                        // Lese das Attribut data-id des Kindelements aus
+                        let dataId = childElement.getAttribute('data-id');
+                        console.log('data-id:', dataId);
+                        selectedStone = get_Object_by_ID(dataId, 'boardTiles')
+                        // Hier kannst du weiteren Code hinzufügen, um mit dataId zu arbeiten
+                        if (selectedStone) {
+                            placeTileOnField(field);
+                        }
+                    }
+                }
+            });
 
-            field_wrapper.appendChild(field)
-
+            fieldWrapper.appendChild(field);
         }
 
-        board_obj.appendChild(field_wrapper)
+        boardElement.appendChild(fieldWrapper);
     }
 }
+
+function placeTileOnField(field) {
+    const selectedIndex = playerHand.indexOf(selectedStone);
+    console.log('1 selectedIndex', selectedIndex);
+    if (selectedIndex !== undefined) {
+        move_Tile_Array.push(selectedStone);
+        console.log('move_Tile_Array', move_Tile_Array);
+    }
+    field.dataset.holdId = selectedStone.uid;
+    field.dataset.holdColor = selectedStone.color;
+    field.dataset.holdValue = selectedStone.value;
+
+    const tileElement = document.createElement('div');
+    tileElement.innerHTML = selectedStone.name;
+    tileElement.className = `${selectedStone.color} stone`;
+    tileElement.dataset.joker = selectedStone.isJoker;
+    tileElement.dataset.color = selectedStone.color;
+    tileElement.dataset.place = 'board';
+    tileElement.dataset.id = selectedStone.uid;
+
+    // tileElement.addEventListener('click', () => {
+    //     clearSelection();
+    //     tileElement.classList.add('selected-stone');
+    // });
+
+    field.appendChild(tileElement);
+
+    playerHand.splice(selectedIndex, 1);
+    renderPlayPieces(playerHand, playerHandElement);
+
+    selectedStone = null;
+}
+
 

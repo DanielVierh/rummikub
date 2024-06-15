@@ -113,6 +113,11 @@
 .stone.orange {
   color: orange;
 }
+.stone .bi-emoji-sunglasses-fill {
+  width: 24px;
+  height: 24px !important;
+  margin-top: 5px;
+}
 .stone.selected-stone {
   outline: 3px solid red;
   box-shadow: 0 0 10px red;
