@@ -251,19 +251,16 @@ function createFields() {
 }
 
 
-
-setTimeout(() => {
-    
 //* Event Listener für Spielfeldklicks hinzufügen
+setTimeout(() => {
 document.querySelectorAll('.field').forEach(field => {
     field.addEventListener('click', (event) => {
-        console.log('Field');
         const targetField = event.currentTarget;
         const fieldHoldId = targetField.getAttribute('data-hold-id');
 
         if (selectedStone) {
             if (is_Move_from_Playerhand) {
-                // Stein vom playerHand zum Spielfeld verschieben
+                //* Stein vom playerHand zum Spielfeld verschieben
                 moveStoneToField(selectedStone, targetField);
                 is_Move_from_Playerhand = false;
                 selectedStone = null;
@@ -271,7 +268,7 @@ document.querySelectorAll('.field').forEach(field => {
                 console.warn('Illegal Move');
             }
         } else if (fieldHoldId) {
-            // Stein vom Spielfeld zurück zur playerHand verschieben
+            //* Stein vom Spielfeld zurück zur playerHand verschieben
             const stone = get_Object_by_ID(fieldHoldId, playground);
             if (stone) {
                 moveStoneToPlayerHand(stone, targetField);
@@ -281,22 +278,24 @@ document.querySelectorAll('.field').forEach(field => {
 });
 }, 1000);
 
+
 function moveStoneToField(stone, field) {
-    // Stein zum Spielfeld-Array hinzufügen
+    //* Stein zum Spielfeld-Array hinzufügen
     playground.push(stone);
-    // Stein von der playerHand entfernen
+    //* Stein von der playerHand entfernen
     removeFromArray(playerHand, stone);
-    // UI-Update
+    //* UI-Update
     renderPlayerhand(playerHand, playerHandElement);
     addStoneToField(stone, field);
 }
 
+
 function moveStoneToPlayerHand(stone, field) {
-    // Stein zur playerHand hinzufügen
+    //* Stein zur playerHand hinzufügen
     playerHand.push(stone);
-    // Stein vom Spielfeld-Array entfernen
+    //* Stein vom Spielfeld-Array entfernen
     removeFromArray(playground, stone);
-    // UI-Update
+    //* UI-Update
     renderPlayerhand(playerHand, playerHandElement);
     removeStoneFromField(field);
 }
@@ -309,12 +308,12 @@ function removeFromArray(array, stone) {
 }
 
 function addStoneToField(stone, field) {
-    // Feld-Attribute aktualisieren
+    //* Feld-Attribute aktualisieren
     field.setAttribute('data-hold-id', stone.uid);
     field.setAttribute('data-hold-color', stone.color);
     field.setAttribute('data-hold-value', stone.value);
 
-    // Stein-Element zum Feld hinzufügen
+    //* Stein-Element zum Feld hinzufügen
     const tileElement = document.createElement('div');
     tileElement.innerHTML = stone.name;
     tileElement.className = `${stone.color} stone`;
@@ -326,12 +325,12 @@ function addStoneToField(stone, field) {
 }
 
 function removeStoneFromField(field) {
-    // Feld-Attribute zurücksetzen
+    //* Feld-Attribute zurücksetzen
     field.removeAttribute('data-hold-id');
     field.removeAttribute('data-hold-color');
     field.removeAttribute('data-hold-value');
     
-    // Stein-Element vom Feld entfernen
+    //* Stein-Element vom Feld entfernen
     while (field.firstChild) {
         field.removeChild(field.firstChild);
     }
