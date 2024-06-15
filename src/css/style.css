@@ -10,7 +10,7 @@
   font-family: sans-serif;
 }
 
-.matchfield {
+.playground {
   background: radial-gradient(rgba(9, 62, 148, 0.544), rgb(1, 1, 94));
   display: flex;
   flex-wrap: wrap;
@@ -22,18 +22,18 @@
   width: 100%;
   overflow-y: scroll;
 }
-.matchfield .field-wrapper {
+.playground .field-wrapper {
   display: flex;
   margin: 5px;
   gap: 5px;
 }
-.matchfield .field-wrapper .field {
+.playground .field-wrapper .field {
   width: var(--fld-width);
   height: var(--fld-height);
   border: 1px solid rgba(173, 216, 230, 0.364);
 }
 
-.stack {
+.nachziehElement {
   margin: 20px;
   position: fixed;
   left: 0%;
@@ -53,7 +53,7 @@
   border: 0.1px solid rgba(0, 0, 0, 0.424);
   z-index: 1;
 }
-.stack::before {
+.nachziehElement::before {
   content: "";
   position: absolute;
   z-index: -1;
@@ -68,7 +68,7 @@
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
   border: 0.1px solid rgba(0, 0, 0, 0.424);
 }
-.stack::after {
+.nachziehElement::after {
   content: "";
   position: absolute;
   z-index: 2;
@@ -136,7 +136,7 @@
   opacity: 0.7;
 }
 
-.board {
+.playerhand {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -151,7 +151,7 @@
   padding-top: 10px;
   justify-content: center;
 }
-.board .info-label {
+.playerhand .info-label {
   position: absolute;
   top: -20px;
   right: 15%;
