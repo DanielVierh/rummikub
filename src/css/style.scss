@@ -2,6 +2,7 @@
     --fld-width: 40px;
     --fld-height: 50px;
 }
+
 * {
     margin: 0;
     padding: 0;
@@ -35,57 +36,57 @@
 }
 
 .nachziehElement {
-   margin: 20px;
-   position: fixed;
-   left: 0%;
-   top: 20%;
-   background-color: rgb(233, 233, 166);
-   width: var(--fld-width);
-   height: var(--fld-height);
-   display: flex;
-   justify-content: center;
-   align-items: flex-start;
-   text-align: center;
-   padding-top: 2px;
-   font-size: 1.9rem;
-   font-weight: bolder;
-   border-radius: 4px;
-   box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
-   border: .1px solid rgba(0, 0, 0, 0.424);
-   z-index: 1;
-
-   &::before {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    left: 10%;
-    width: var(--fld-width);
+    margin: 20px;
+    position: fixed;
+    left: 0%;
+    top: 20%;
     background-color: rgb(233, 233, 166);
+    width: var(--fld-width);
     height: var(--fld-height);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: center;
     padding-top: 2px;
     font-size: 1.9rem;
     font-weight: bolder;
     border-radius: 4px;
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
     border: .1px solid rgba(0, 0, 0, 0.424);
-   }
+    z-index: 1;
 
-   &::after {
-    content: '';
-    position: absolute;
-    z-index: 2;
-    left: 5%;
-    top: 10%;
-    width: var(--fld-width);
-    height: var(--fld-height);
-    background-color: rgb(233, 233, 166);
-    padding-top: 2px;
-    font-size: 1.9rem;
-    font-weight: bolder;
-    border-radius: 4px;
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
-    border: .1px solid rgba(0, 0, 0, 0.424);
-   }
+    &::before {
+        content: '';
+        position: absolute;
+        z-index: -1;
+        left: 10%;
+        width: var(--fld-width);
+        background-color: rgb(233, 233, 166);
+        height: var(--fld-height);
+        padding-top: 2px;
+        font-size: 1.9rem;
+        font-weight: bolder;
+        border-radius: 4px;
+        box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+        border: .1px solid rgba(0, 0, 0, 0.424);
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        z-index: 2;
+        left: 5%;
+        top: 10%;
+        width: var(--fld-width);
+        height: var(--fld-height);
+        background-color: rgb(233, 233, 166);
+        padding-top: 2px;
+        font-size: 1.9rem;
+        font-weight: bolder;
+        border-radius: 4px;
+        box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+        border: .1px solid rgba(0, 0, 0, 0.424);
+    }
 }
 
 .stone {
@@ -181,34 +182,39 @@
         bottom: 10%;
         left: 50%;
         transform: translateX(-50%);
-        min-width: 90px; 
+        min-width: 90px;
         height: 90px;
         background-color: white;
         border-radius: 8px;
-        box-shadow: 0 0 20px white;
+        box-shadow: 0 0 40px white;
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 5px;
+        padding: 5px 20px;
         gap: 5px;
         z-index: 10;
     }
 }
 
 .dropzone-playerhand {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 60px;
-    height: 60px;
-    background-color: blue;
-    border-radius: 0 40px 40px 0;
-    z-index: 10000;
-    color: white;
-    font-size: 12px; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-}
 
+    display: none;
+
+    &.active {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 60px;
+        height: 60px;
+        background-color: blue;
+        border-radius: 0 40px 40px 0;
+        z-index: 10000;
+        color: white;
+        font-size: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+
+}

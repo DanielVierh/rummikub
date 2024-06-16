@@ -124,6 +124,7 @@ function renderClipBoard(array, renderSurface) {
             clearSelection();
             tileElement.classList.add('selected-stone');
             selectedStone = piece;
+            dropzone_playerhand.classList.add('active');
         });
         renderSurface.appendChild(tileElement);
     });
@@ -215,6 +216,7 @@ function moveStoneToField(stone, field) {
         removeFromArray(playerHand, stone);
     } else if (is_Move_from_Clipboard) {
         removeFromArray(clipboard, stone);
+        dropzone_playerhand.classList.remove('active');
     }
     renderPlayerhand(playerHand, playerHandElement);
     renderClipBoard(clipboard, clipboardElement);
@@ -265,6 +267,7 @@ dropzone_playerhand.addEventListener('click', () => {
             moveStoneToPlayerHand(selectedStone, clipboardElement, clipboard);
             renderClipBoard(clipboard, clipboardElement);
             selectedStone = null;
+            dropzone_playerhand.classList.remove('active');
         }
     } catch (error) {
         console.log(error);
