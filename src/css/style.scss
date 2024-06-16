@@ -173,3 +173,42 @@
 
 }
 
+.clipboard {
+    display: none;
+
+    &.active {
+        position: fixed;
+        bottom: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+        min-width: 90px; 
+        height: 90px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 0 20px white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+        gap: 5px;
+        z-index: 10;
+    }
+}
+
+.dropzone-playerhand {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 60px;
+    height: 60px;
+    background-color: blue;
+    border-radius: 0 40px 40px 0;
+    z-index: 10000;
+    color: white;
+    font-size: 12px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
