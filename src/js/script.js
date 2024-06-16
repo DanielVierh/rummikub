@@ -100,6 +100,7 @@ function renderPlayerhand(array, renderSurface) {
             clearSelection();
             tileElement.classList.add('selected-stone');
             selectedStone = piece;
+            dropzone_playerhand.classList.remove('active');
         });
         renderSurface.appendChild(tileElement);
     });
