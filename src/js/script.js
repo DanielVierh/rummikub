@@ -70,7 +70,7 @@ function createPlayStones() {
                 nachziehstapel.push(new PlayStones(value, value, color, false, `${uidCounter++}`));
             }
         }
-        nachziehstapel.push(new PlayStones(0, `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="green" class="bi bi-emoji-sunglasses-fill" viewBox="0 0 16 16">
+        nachziehstapel.push(new PlayStones(0, `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-emoji-sunglasses-fill" viewBox="0 0 16 16">
             <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M2.31 5.243A1 1 0 0 1 3.28 4H6a1 1 0 0 1 1 1v.116A4.2 4.2 0 0 1 8 5c.35 0 .69.04 1 .116V5a1 1 0 0 1 1-1h2.72a1 1 0 0 1 .97 1.243l-.311 1.242A2 2 0 0 1 11.439 8H11a2 2 0 0 1-1.994-1.839A3 3 0 0 0 8 6c-.393 0-.74.064-1.006.161A2 2 0 0 1 5 8h-.438a2 2 0 0 1-1.94-1.515zM4.969 9.75A3.5 3.5 0 0 0 8 11.5a3.5 3.5 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1-3.898-2.25.5.5 0 0 1 .866-.5z"/>
         </svg>`, 'black', true, `${uidCounter++}`));
     }
@@ -140,14 +140,17 @@ function clearSelection() {
 
 function dealInitialStones() {
     for (let i = 0; i < 14; i++) {
-        drawTile(playerHand);
-        drawTile(computerHand);
+        drawTile(playerHand); 
+        //drawTile(computerHand); //TODO - Später wieder rein
     }
 }
 
 function drawTile(hand) {
     if (nachziehstapel.length > 0) {
         hand.push(nachziehstapel.pop());
+        const nachziehstapelSize = nachziehstapel.length;
+        nachziehElement.innerHTML = nachziehstapelSize;
+        console.log(nachziehstapelSize);
     }
 }
 
@@ -299,31 +302,25 @@ function finish_Round() {
     clearInvalidMarks();
     checkPlayground();
 }
-
 //*ANCHOR Check Valid
-//TODO - Make dynamic
 function checkPlayground() {
     let valid = true;
     clearInvalidMarks();
 
     //* Iterate through each field wrapper (rows)
     for (let i = 1; i <= 14; i++) {
-        let rowStones = [];
-        let colStones = [];
+        let stones = [];
 
-        //* Iterate through each field in the row
+        //* Iterate through each field in the wrapper (row)
         for (let j = 1; j <= 13; j++) {
-            const rowField = document.getElementById(`field_wrapper${i}_${j}`);
-            const colField = document.getElementById(`field_wrapper${j}_${i}`);
-            const rowFieldStone = rowField ? getStoneFromField(rowField) : null;
-            const colFieldStone = colField ? getStoneFromField(colField) : null;
+            const field = document.getElementById(`field_wrapper${i}_${j}`);
+            const fieldStone = field ? getStoneFromField(field) : null;
 
-            if (rowFieldStone) rowStones.push(rowFieldStone);
-            if (colFieldStone) colStones.push(colFieldStone);
+            if (fieldStone) stones.push(fieldStone);
         }
 
-        //* Check if the row and column stones follow the rules
-        if (!checkStoneGroup(rowStones, 'row', i) || !checkStoneGroup(colStones, 'col', i)) {
+        //* Check if the stones follow the rules within the wrapper (row)
+        if (!checkStoneGroup(stones, i)) {
             valid = false;
         }
     }
@@ -343,40 +340,65 @@ function getStoneFromField(field) {
     return null;
 }
 
-function checkStoneGroup(stones, type, index) {
+function checkStoneGroup(stones, rowIndex) {
     if (stones.length < 2) return true;
 
-    let isSameColor = true;
-    let isSameValue = true;
-    const colors = new Set();
+    let isValid = true;
 
-    for (let i = 1; i < stones.length; i++) {
-        if (stones[i].color !== stones[i - 1].color) isSameColor = false;
-        if (stones[i].value !== stones[i - 1].value) isSameValue = false;
-        colors.add(stones[i].color);
-    }
-
-    if (isSameColor) {
-        return checkAscendingValues(stones, type, index);
-    } else if (isSameValue && colors.size === stones.length) {
+    if (isSameColorGroup(stones) && checkAscendingValues(stones)) {
         return true;
+    } else if (isSameValueGroup(stones) && checkUniqueColors(stones)) {
+        return true;
+    } else if (containsJoker(stones)) {
+        if (checkWithJoker(stones)) {
+            return true;
+        }
     }
 
-    markInvalid(stones, type, index);
+    markInvalid(stones, rowIndex);
     return false;
 }
 
-function checkAscendingValues(stones, type, index) {
+function isSameColorGroup(stones) {
+    return stones.every(stone => stone.color === stones[0].color);
+}
+
+function checkAscendingValues(stones) {
+    stones.sort((a, b) => a.value - b.value);
     for (let i = 1; i < stones.length; i++) {
-        if (stones[i].value !== stones[i - 1].value + 1) {
-            markInvalid(stones, type, index);
+        if (stones[i].value !== stones[i - 1].value + 1 && !stones[i - 1].isJoker) {
             return false;
         }
     }
     return true;
 }
 
-function markInvalid(stones, type, index) {
+function isSameValueGroup(stones) {
+    return stones.every(stone => stone.value === stones[0].value || stone.isJoker);
+}
+
+function checkUniqueColors(stones) {
+    const colors = new Set(stones.map(stone => stone.color));
+    return colors.size === stones.length;
+}
+
+function containsJoker(stones) {
+    return stones.some(stone => stone.isJoker);
+}
+
+function checkWithJoker(stones) {
+    let nonJokerStones = stones.filter(stone => !stone.isJoker);
+
+    if (isSameColorGroup(nonJokerStones)) {
+        return checkAscendingValues(nonJokerStones);
+    } else if (isSameValueGroup(nonJokerStones) && checkUniqueColors(nonJokerStones)) {
+        return true;
+    }
+
+    return false;
+}
+
+function markInvalid(stones, rowIndex) {
     stones.forEach(stone => {
         const field = document.querySelector(`.field[data-hold-id="${stone.uid}"]`);
         if (field) {

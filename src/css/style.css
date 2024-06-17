@@ -58,6 +58,8 @@
   z-index: 1;
   cursor: pointer;
   transition: all 0.6s ease;
+  font-size: 18px;
+  color: gray;
 }
 .nachziehElement:hover {
   outline: 3px solid white;
@@ -80,7 +82,7 @@
 .nachziehElement::after {
   content: "";
   position: absolute;
-  z-index: 2;
+  z-index: -2;
   left: 5%;
   top: 10%;
   width: var(--fld-width);
