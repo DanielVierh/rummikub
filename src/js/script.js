@@ -171,7 +171,7 @@ function assignPlaces(tileArray, placeName) {
 }
 
 function createFields() {
-    for (let i = 1; i <= 14; i++) {
+    for (let i = 1; i <= 22; i++) {
         const fieldWrapper = document.createElement('div');
         fieldWrapper.className = 'field-wrapper';
         fieldWrapper.id = `field_wrapper${i}`;
@@ -306,9 +306,11 @@ function finish_Round() {
 function checkPlayground() {
     let valid = true;
     clearInvalidMarks();
+    let totalFirstMoveValue = 0;
+    const field_wrappers = document.querySelectorAll('.field-wrapper');
 
     //* Iterate through each field wrapper (rows)
-    for (let i = 1; i <= 14; i++) {
+    for (let i = 1; i <= field_wrappers.length; i++) {
         let stones = [];
 
         //* Iterate through each field in the wrapper (row)
@@ -325,10 +327,21 @@ function checkPlayground() {
         }
     }
 
-    if (valid) {
-        infoLabel.textContent = 'All sequences are valid.';
+    if (is_firstmove && is_Move_from_Playerhand) {
+        console.log('is_Move_from_Playerhand', is_Move_from_Playerhand);
+        if (totalFirstMoveValue >= 30) {
+            infoLabel.textContent = 'First move is valid.';
+            is_firstmove = false;
+        } else {
+            infoLabel.textContent = 'Für deinen ersten Zug benötigst du mindestend 30 Punkte.';
+            valid = false;
+        }
     } else {
-        infoLabel.textContent = 'There are invalid sequences.';
+        if (valid) {
+            infoLabel.textContent = 'All sequences are valid.';
+        } else {
+            infoLabel.textContent = 'There are invalid sequences.';
+        }
     }
 }
 
@@ -411,4 +424,8 @@ function clearInvalidMarks() {
     document.querySelectorAll('.invalid-stone').forEach(field => {
         field.classList.remove('invalid-stone');
     });
+}
+
+function calculateTotalValue(stones) {
+    return stones.reduce((total, stone) => total + (stone.isJoker ? 0 : stone.value), 0);
 }
