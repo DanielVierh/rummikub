@@ -15,6 +15,7 @@ const infoLabel = document.getElementById('lbl_info');
 const clipboardElement = document.getElementById('clipboardElement');
 const dropzone_playerhand = document.getElementById('dropzone_playerhand');
 
+
 window.onload = init;
 
 function init() {
@@ -281,3 +282,8 @@ function moveStoneToPlayerHand(stone, renderSurface, delFromArr) {
     renderPlayerhand(playerHand, playerHandElement);
     renderSurface.innerHTML = '';
 }
+
+nachziehElement.addEventListener('click', ()=> {
+    drawTile(playerHand);
+    renderPlayerhand(playerHand, playerHandElement)
+})

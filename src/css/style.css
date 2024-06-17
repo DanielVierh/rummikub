@@ -52,6 +52,11 @@
   box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
   border: 0.1px solid rgba(0, 0, 0, 0.424);
   z-index: 1;
+  cursor: pointer;
+  transition: all 0.6s ease;
+}
+.nachziehElement:hover {
+  outline: 3px solid white;
 }
 .nachziehElement::before {
   content: "";
@@ -100,6 +105,11 @@
   border-radius: 4px;
   box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
   border: 0.1px solid rgba(0, 0, 0, 0.424);
+  cursor: pointer;
+  transition: all 0.6s ease-in-out;
+}
+.stone:hover {
+  outline: 3px solid rgba(173, 216, 230, 0.419);
 }
 .stone.red {
   color: red;
