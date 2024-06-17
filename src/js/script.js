@@ -338,9 +338,11 @@ function checkPlayground() {
         }
     } else {
         if (valid) {
-            infoLabel.textContent = 'All sequences are valid.';
+            infoLabel.textContent = 'Alles Paletti :)';
+            infoLabel.style.background = 'green';
         } else {
-            infoLabel.textContent = 'There are invalid sequences.';
+            infoLabel.textContent = 'Fehlerhafter Zug';
+            infoLabel.style.background = 'red';
         }
     }
 }
@@ -379,6 +381,7 @@ function isSameColorGroup(stones) {
 function checkAscendingValues(stones) {
     stones.sort((a, b) => a.value - b.value);
     for (let i = 1; i < stones.length; i++) {
+        console.log(stones[i]);
         if (stones[i].value !== stones[i - 1].value + 1 && !stones[i - 1].isJoker) {
             return false;
         }
