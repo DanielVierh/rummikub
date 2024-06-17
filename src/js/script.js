@@ -14,7 +14,7 @@ const playerHandElement = document.getElementById('playerhand');
 const infoLabel = document.getElementById('lbl_info');
 const clipboardElement = document.getElementById('clipboardElement');
 const dropzone_playerhand = document.getElementById('dropzone_playerhand');
-
+const finishRound = document.getElementById('finishRound');
 
 window.onload = init;
 
@@ -64,15 +64,15 @@ function createPlayStones() {
     const colors = ['red', 'orange', 'blue', 'green'];
     let uidCounter = 1;
 
-    for (let d = 1; d <= 2; d++) {
+    for (let d = 1; d <= 2; d++){
         for (const color of colors) {
             for (let value = 1; value <= 13; value++) {
                 nachziehstapel.push(new PlayStones(value, value, color, false, `${uidCounter++}`));
             }
         }
         nachziehstapel.push(new PlayStones(0, `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="green" class="bi bi-emoji-sunglasses-fill" viewBox="0 0 16 16">
-  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M2.31 5.243A1 1 0 0 1 3.28 4H6a1 1 0 0 1 1 1v.116A4.2 4.2 0 0 1 8 5c.35 0 .69.04 1 .116V5a1 1 0 0 1 1-1h2.72a1 1 0 0 1 .97 1.243l-.311 1.242A2 2 0 0 1 11.439 8H11a2 2 0 0 1-1.994-1.839A3 3 0 0 0 8 6c-.393 0-.74.064-1.006.161A2 2 0 0 1 5 8h-.438a2 2 0 0 1-1.94-1.515zM4.969 9.75A3.5 3.5 0 0 0 8 11.5a3.5 3.5 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1-3.898-2.25.5.5 0 0 1 .866-.5z"/>
-</svg>`, 'black', true, `${uidCounter++}`));
+            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M2.31 5.243A1 1 0 0 1 3.28 4H6a1 1 0 0 1 1 1v.116A4.2 4.2 0 0 1 8 5c.35 0 .69.04 1 .116V5a1 1 0 0 1 1-1h2.72a1 1 0 0 1 .97 1.243l-.311 1.242A2 2 0 0 1 11.439 8H11a2 2 0 0 1-1.994-1.839A3 3 0 0 0 8 6c-.393 0-.74.064-1.006.161A2 2 0 0 1 5 8h-.438a2 2 0 0 1-1.94-1.515zM4.969 9.75A3.5 3.5 0 0 0 8 11.5a3.5 3.5 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1-3.898-2.25.5.5 0 0 1 .866-.5z"/>
+        </svg>`, 'black', true, `${uidCounter++}`));
     }
 }
 
@@ -284,16 +284,28 @@ function moveStoneToPlayerHand(stone, renderSurface, delFromArr) {
 }
 
 //*ANCHOR - Nachziehen
-nachziehElement.addEventListener('click', ()=> {
+nachziehElement.addEventListener('click', () => {
     drawTile(playerHand);
-    renderPlayerhand(playerHand, playerHandElement)
+    renderPlayerhand(playerHand, playerHandElement);
+    finish_Round();
+});
+
+//*ANCHOR - Finish Round
+finishRound.addEventListener('click', ()=> {
+    finish_Round();
 })
+
+function finish_Round() {
+    clearInvalidMarks();
+    checkPlayground();
+}
 
 //*ANCHOR Check Valid
 //TODO - Make dynamic
 function checkPlayground() {
     let valid = true;
-    
+    clearInvalidMarks();
+
     //* Iterate through each field wrapper (rows)
     for (let i = 1; i <= 14; i++) {
         let rowStones = [];
@@ -303,17 +315,16 @@ function checkPlayground() {
         for (let j = 1; j <= 13; j++) {
             const rowField = document.getElementById(`field_wrapper${i}_${j}`);
             const colField = document.getElementById(`field_wrapper${j}_${i}`);
-            const rowFieldStone = getStoneFromField(rowField);
-            const colFieldStone = getStoneFromField(colField);
-            
+            const rowFieldStone = rowField ? getStoneFromField(rowField) : null;
+            const colFieldStone = colField ? getStoneFromField(colField) : null;
+
             if (rowFieldStone) rowStones.push(rowFieldStone);
             if (colFieldStone) colStones.push(colFieldStone);
         }
 
         //* Check if the row and column stones follow the rules
-        if (!checkStoneGroup(rowStones) || !checkStoneGroup(colStones)) {
+        if (!checkStoneGroup(rowStones, 'row', i) || !checkStoneGroup(colStones, 'col', i)) {
             valid = false;
-            break;
         }
     }
 
@@ -332,7 +343,7 @@ function getStoneFromField(field) {
     return null;
 }
 
-function checkStoneGroup(stones) {
+function checkStoneGroup(stones, type, index) {
     if (stones.length < 2) return true;
 
     let isSameColor = true;
@@ -346,19 +357,36 @@ function checkStoneGroup(stones) {
     }
 
     if (isSameColor) {
-        return checkAscendingValues(stones);
+        return checkAscendingValues(stones, type, index);
     } else if (isSameValue && colors.size === stones.length) {
         return true;
     }
 
+    markInvalid(stones, type, index);
     return false;
 }
 
-function checkAscendingValues(stones) {
+function checkAscendingValues(stones, type, index) {
     for (let i = 1; i < stones.length; i++) {
         if (stones[i].value !== stones[i - 1].value + 1) {
+            markInvalid(stones, type, index);
             return false;
         }
     }
     return true;
+}
+
+function markInvalid(stones, type, index) {
+    stones.forEach(stone => {
+        const field = document.querySelector(`.field[data-hold-id="${stone.uid}"]`);
+        if (field) {
+            field.classList.add('invalid-stone');
+        }
+    });
+}
+
+function clearInvalidMarks() {
+    document.querySelectorAll('.invalid-stone').forEach(field => {
+        field.classList.remove('invalid-stone');
+    });
 }
