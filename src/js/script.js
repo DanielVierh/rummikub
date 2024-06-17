@@ -283,7 +283,82 @@ function moveStoneToPlayerHand(stone, renderSurface, delFromArr) {
     renderSurface.innerHTML = '';
 }
 
+//*ANCHOR - Nachziehen
 nachziehElement.addEventListener('click', ()=> {
     drawTile(playerHand);
     renderPlayerhand(playerHand, playerHandElement)
 })
+
+//*ANCHOR Check Valid
+//TODO - Make dynamic
+function checkPlayground() {
+    let valid = true;
+    
+    //* Iterate through each field wrapper (rows)
+    for (let i = 1; i <= 14; i++) {
+        let rowStones = [];
+        let colStones = [];
+
+        //* Iterate through each field in the row
+        for (let j = 1; j <= 13; j++) {
+            const rowField = document.getElementById(`field_wrapper${i}_${j}`);
+            const colField = document.getElementById(`field_wrapper${j}_${i}`);
+            const rowFieldStone = getStoneFromField(rowField);
+            const colFieldStone = getStoneFromField(colField);
+            
+            if (rowFieldStone) rowStones.push(rowFieldStone);
+            if (colFieldStone) colStones.push(colFieldStone);
+        }
+
+        //* Check if the row and column stones follow the rules
+        if (!checkStoneGroup(rowStones) || !checkStoneGroup(colStones)) {
+            valid = false;
+            break;
+        }
+    }
+
+    if (valid) {
+        infoLabel.textContent = 'All sequences are valid.';
+    } else {
+        infoLabel.textContent = 'There are invalid sequences.';
+    }
+}
+
+function getStoneFromField(field) {
+    const holdId = field.getAttribute('data-hold-id');
+    if (holdId) {
+        return get_Object_by_ID(holdId, playground);
+    }
+    return null;
+}
+
+function checkStoneGroup(stones) {
+    if (stones.length < 2) return true;
+
+    let isSameColor = true;
+    let isSameValue = true;
+    const colors = new Set();
+
+    for (let i = 1; i < stones.length; i++) {
+        if (stones[i].color !== stones[i - 1].color) isSameColor = false;
+        if (stones[i].value !== stones[i - 1].value) isSameValue = false;
+        colors.add(stones[i].color);
+    }
+
+    if (isSameColor) {
+        return checkAscendingValues(stones);
+    } else if (isSameValue && colors.size === stones.length) {
+        return true;
+    }
+
+    return false;
+}
+
+function checkAscendingValues(stones) {
+    for (let i = 1; i < stones.length; i++) {
+        if (stones[i].value !== stones[i - 1].value + 1) {
+            return false;
+        }
+    }
+    return true;
+}
