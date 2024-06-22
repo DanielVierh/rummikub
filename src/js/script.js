@@ -7,6 +7,7 @@ let selectedStone = null;
 let is_firstmove = true;
 let is_Move_from_Playerhand = false;
 let is_Move_from_Clipboard = false;
+let totalFirstMoveValue = 0;
 
 const playgroundElement = document.getElementById('playground');
 const nachziehElement = document.getElementById('nachziehElement');
@@ -319,7 +320,9 @@ nachziehElement.addEventListener('click', () => {
         animation_stone.classList.remove('active');
         drawTile(playerHand);
         renderPlayerhand(playerHand, playerHandElement);
-        finish_Round();
+        if(!is_firstmove) {
+            finish_Round();
+        }
     }, 400);
 });
 
@@ -336,7 +339,6 @@ function finish_Round() {
 function checkPlayground() {
     let valid = true;
     clearInvalidMarks();
-    let totalFirstMoveValue = 0;
     const field_wrappers = document.querySelectorAll('.field-wrapper');
 
     //* Iterate through each field wrapper (rows)
@@ -351,13 +353,18 @@ function checkPlayground() {
             if (fieldStone) stones.push(fieldStone);
         }
 
+        //* Check length min 3
+        if(stones.length > 0 && stones.length < 3) {
+            valid = false;
+            break;
+        }
         //* Check if the stones follow the rules within the wrapper (row)
         if (!checkStoneGroup(stones, i)) {
             valid = false;
         }
     }
 
-    if (is_firstmove && is_Move_from_Playerhand) {
+    if (is_firstmove) {
         console.log('is_Move_from_Playerhand', is_Move_from_Playerhand);
         if (totalFirstMoveValue >= 30) {
             infoLabel.textContent = 'First move is valid.';
@@ -410,9 +417,9 @@ function isSameColorGroup(stones) {
 
 function checkAscendingValues(stones) {
     stones.sort((a, b) => a.value - b.value);
-    for (let i = 1; i < stones.length; i++) {
-        console.log(stones[i]);
-        if (stones[i].value !== stones[i - 1].value + 1 && !stones[i - 1].isJoker) {
+    for (let i = 0; i < stones.length; i++) {
+        totalFirstMoveValue = totalFirstMoveValue += stones[i].value 
+        if (i > 0 && stones[i].value !== stones[i - 1].value + 1 && !stones[i - 1].isJoker) {
             return false;
         }
     }
