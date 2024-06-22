@@ -135,8 +135,8 @@
   margin-top: 5px;
 }
 .stone.selected-stone {
-  outline: 3px solid red;
-  box-shadow: 0 0 10px red;
+  outline: 3px solid lightgreen;
+  box-shadow: 0 0 10px lightgreen;
 }
 .stone::after {
   content: "";
