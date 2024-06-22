@@ -15,6 +15,7 @@ const infoLabel = document.getElementById('lbl_info');
 const clipboardElement = document.getElementById('clipboardElement');
 const dropzone_playerhand = document.getElementById('dropzone_playerhand');
 const finishRound = document.getElementById('finishRound');
+const animation_stone = document.getElementById('animation_stone')
 
 window.onload = init;
 
@@ -313,9 +314,13 @@ function moveStoneToPlayerHand(stone, renderSurface, delFromArr) {
 
 //*ANCHOR - Nachziehen
 nachziehElement.addEventListener('click', () => {
-    drawTile(playerHand);
-    renderPlayerhand(playerHand, playerHandElement);
-    finish_Round();
+    animation_stone.classList.add('active')
+    setTimeout(() => {
+        animation_stone.classList.remove('active');
+        drawTile(playerHand);
+        renderPlayerhand(playerHand, playerHandElement);
+        finish_Round();
+    }, 400);
 });
 
 //*ANCHOR - Finish Round
