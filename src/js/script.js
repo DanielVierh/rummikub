@@ -26,6 +26,7 @@ function init() {
     }, 100);
 
     setTimeout(() => {
+        set_fieldNumbers()
         dealInitialStones();
     }, 200);
 
@@ -145,6 +146,7 @@ function dealInitialStones() {
     }
 }
 
+//*ANCHOR -  Draw Tile
 function drawTile(hand) {
     if (nachziehstapel.length > 0) {
         hand.push(nachziehstapel.pop());
@@ -154,6 +156,7 @@ function drawTile(hand) {
     }
 }
 
+//*ANCHOR -  Init UI
 function initUI() {
     assignPlaces(nachziehstapel, 'nachzieh');
     assignPlaces(computerHand, 'computerHand');
@@ -164,12 +167,14 @@ function initUI() {
     renderClipBoard(clipboard, clipboardElement);
 }
 
+//*ANCHOR - Assign Places
 function assignPlaces(tileArray, placeName) {
     tileArray.forEach(tile => {
         tile.change_place(placeName);
     });
 }
 
+//*ANCHOR - Create Fields
 function createFields() {
     for (let i = 1; i <= 22; i++) {
         const fieldWrapper = document.createElement('div');
@@ -183,6 +188,7 @@ function createFields() {
             field.dataset.holdId = '';
             field.dataset.holdColor = '';
             field.dataset.holdValue = '';
+            field.dataset.fieldNumber = j;
 
             fieldWrapper.appendChild(field);
         }
@@ -190,6 +196,23 @@ function createFields() {
         playgroundElement.appendChild(fieldWrapper);
     }
 }
+
+//*ANCHOR - Set Field Numbers
+function set_fieldNumbers() {
+    const allFields = document.querySelectorAll('.field');
+
+    allFields.forEach((field) => {
+        const currentFieldNumber = field.getAttribute('data-field-number');
+        
+        // Check if a span element already exists in the field
+        if (!field.querySelector('span')) {
+            let numberSpan = document.createElement('span');
+            numberSpan.innerHTML = currentFieldNumber;
+            field.appendChild(numberSpan);
+        }
+    });
+}
+
 
 setTimeout(() => {
     document.querySelectorAll('.field').forEach(field => {
@@ -257,6 +280,7 @@ function addStoneToField(stone, field) {
     field.appendChild(tileElement);
 }
 
+
 function removeStoneFromField(field) {
     field.removeAttribute('data-hold-id');
     field.removeAttribute('data-hold-color');
@@ -264,6 +288,7 @@ function removeStoneFromField(field) {
     while (field.firstChild) {
         field.removeChild(field.firstChild);
     }
+    set_fieldNumbers()
 }
 
 dropzone_playerhand.addEventListener('click', () => {

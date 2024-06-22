@@ -31,6 +31,15 @@
   width: var(--fld-width);
   height: var(--fld-height);
   border: 1px solid rgba(173, 216, 230, 0.364);
+  position: relative;
+}
+.playground .field-wrapper .field span {
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: gray;
 }
 .playground .field-wrapper .invalid-stone {
   border: 2px solid red;
